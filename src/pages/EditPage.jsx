@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { encodeGameFile } from '../utils/gameFile'
 import './EditPage.css'
 
@@ -102,7 +103,10 @@ export default function EditPage() {
 
   return (
     <div className="edit-page">
-      <h1 className="edit-title">Create a Wall</h1>
+      <div className="edit-header">
+        <Link to="/" className="back-link">← Play</Link>
+        <h1 className="edit-title">Create a Wall</h1>
+      </div>
 
       {/* ── Global settings ── */}
       <div className="edit-settings">

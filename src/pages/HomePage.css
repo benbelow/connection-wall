@@ -75,6 +75,24 @@
   border-color: #4a90d9;
 }
 
+.edit-link {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid #2a4a6a;
+  border-radius: var(--radius);
+  padding: 0.5rem 1.1rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.edit-link:hover {
+  background: #1a4a7a;
+  border-color: #4a90d9;
+  color: var(--text);
+}
+
 .import-error {
   background: rgba(231, 76, 60, 0.12);
   border: 1px solid #e74c3c;

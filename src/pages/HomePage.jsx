@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import Wall from '../components/Wall'
 import { testConfig } from '../config'
 import { decodeGameFile } from '../utils/gameFile'
@@ -60,6 +61,9 @@ export default function HomePage() {
           <button className="import-btn" onClick={handleImportClick}>
             Import Game
           </button>
+          <Link to="/edit" className="edit-link">
+            Create Wall
+          </Link>
           <input
             ref={fileInputRef}
             type="file"

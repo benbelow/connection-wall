@@ -7,10 +7,27 @@
   gap: 1.5rem;
 }
 
+.edit-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.back-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--text);
+}
+
 .edit-title {
   font-size: 2rem;
   color: var(--text);
-  text-align: center;
 }
 
 /* ── Settings row ──────────────────────────────────────── */
