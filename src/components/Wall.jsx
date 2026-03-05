@@ -37,18 +37,14 @@ const GROUP_COLOURS = [
 
 export default function Wall({ config }) {
   const x = config.groups.length
-  // Max score = one correct combination per pair within each group
-  // e.g. 5 groups × 4 merges = 20 for a 5×5
-  const maxScore = x * (x - 1)
 
   const [tiles, setTiles] = useState(() => buildInitialTiles(config))
   const [selected, setSelected] = useState(null) // tile id
   const [score, setScore] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [showWin, setShowWin] = useState(false)
-  const [shake, setShake] = useState(false) // wrong-answer feedback
+  const [shake, setShake] = useState(false)
 
-  // Map groupId → group index for stable colour assignment
   const groupIndexMap = Object.fromEntries(
     config.groups.map((g, i) => [g.id, i])
   )
@@ -57,23 +53,19 @@ export default function Wall({ config }) {
     const tile = tiles.find((t) => t.id === tileId)
     if (!tile || tile.hidden || tile.completed) return
 
-    // Deselect on second click of same tile
     if (selected === tileId) {
       setSelected(null)
       return
     }
 
-    // First selection
     if (selected === null) {
       setSelected(tileId)
       return
     }
 
-    // Second selection — evaluate the pair
     const selTile = tiles.find((t) => t.id === selected)
 
     if (selTile.groupId === tile.groupId) {
-      // Correct combination
       const mergedItems = [...selTile.items, ...tile.items]
       const group = config.groups.find((g) => g.id === tile.groupId)
       const isComplete = mergedItems.length === group.items.length
@@ -88,13 +80,9 @@ export default function Wall({ config }) {
       setScore((s) => s + 1)
       setSelected(null)
 
-      // Check win: all groups have exactly one visible completed tile
       const completedCount = newTiles.filter((t) => !t.hidden && t.completed).length
-      if (completedCount === x) {
-        setShowWin(true)
-      }
+      if (completedCount === x) setShowWin(true)
     } else {
-      // Wrong combination
       setMistakes((m) => m + 1)
       setSelected(null)
       triggerShake()
@@ -132,60 +120,67 @@ export default function Wall({ config }) {
 
   return (
     <div className="wall-wrapper">
-      {/* Scoreboard */}
+      {/* Scoreboard — fixed against both scroll axes */}
       <div className="scoreboard">
         <div className="score-block">
           <span className="score-label">Score</span>
           <span className="score-value">{score}</span>
         </div>
-        <div className="score-block mistakes-block">
+        <div className="score-block">
           <span className="score-label">Mistakes</span>
           <span className="score-value mistakes-value">{mistakes}</span>
         </div>
+        <button
+          className="clear-btn"
+          onClick={() => setSelected(null)}
+          disabled={selected === null}
+        >
+          Clear
+        </button>
         <button className="reset-btn" onClick={resetGame}>
           Reset
         </button>
       </div>
 
-      {/* Grid */}
-      <div
-        className={`wall-grid${shake ? ' shake' : ''}`}
-        style={{ '--cols': x }}
-      >
-        {tiles.map((tile) => {
-          if (tile.hidden) {
-            return <div key={tile.id} className="tile tile--ghost" aria-hidden="true" />
-          }
+      {/* Scrollable grid container */}
+      <div className="grid-scroll">
+        <div
+          className={`wall-grid${shake ? ' shake' : ''}`}
+          style={{ '--cols': x }}
+        >
+          {tiles.map((tile) => {
+            if (tile.hidden) return null
 
-          const content = getTileContent(tile)
-          const isSelected = selected === tile.id
-          const colourIndex = groupIndexMap[tile.groupId]
-          const colour = GROUP_COLOURS[colourIndex % GROUP_COLOURS.length]
+            const content = getTileContent(tile)
+            const isSelected = selected === tile.id
+            const colourIndex = groupIndexMap[tile.groupId]
+            const colour = GROUP_COLOURS[colourIndex % GROUP_COLOURS.length]
 
-          return (
-            <div
-              key={tile.id}
-              className={[
-                'tile',
-                isSelected ? 'tile--selected' : '',
-                content.isComplete ? 'tile--complete' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              style={content.isComplete ? { '--group-colour': colour } : {}}
-              onClick={() => handleClick(tile.id)}
-              role="button"
-              tabIndex={content.isComplete ? -1 : 0}
-              onKeyDown={(e) => e.key === 'Enter' && handleClick(tile.id)}
-              aria-pressed={isSelected}
-            >
-              <span className="tile-primary">{content.primary}</span>
-              {content.count !== null && (
-                <span className="tile-count">({content.count})</span>
-              )}
-            </div>
-          )
-        })}
+            return (
+              <div
+                key={tile.id}
+                className={[
+                  'tile',
+                  isSelected ? 'tile--selected' : '',
+                  content.isComplete ? 'tile--complete' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                style={content.isComplete ? { '--group-colour': colour } : {}}
+                onClick={() => handleClick(tile.id)}
+                role="button"
+                tabIndex={content.isComplete ? -1 : 0}
+                onKeyDown={(e) => e.key === 'Enter' && handleClick(tile.id)}
+                aria-pressed={isSelected}
+              >
+                <span className="tile-primary">{content.primary}</span>
+                {content.count !== null && (
+                  <span className="tile-count">({content.count})</span>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {/* Win modal */}
