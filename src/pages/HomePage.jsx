@@ -7,6 +7,7 @@ import './HomePage.css'
 
 export default function HomePage() {
   const [config, setConfig] = useState(testConfig)
+  const [wallKey, setWallKey] = useState(0)
   const [importError, setImportError] = useState(null)
   const [importedName, setImportedName] = useState(null)
   const fileInputRef = useRef(null)
@@ -33,6 +34,7 @@ export default function HomePage() {
         return
       }
       setConfig(result.config)
+      setWallKey((k) => k + 1)
       setImportedName(file.name)
       setImportError(null)
     }
@@ -41,6 +43,7 @@ export default function HomePage() {
 
   const handleResetToDefault = () => {
     setConfig(testConfig)
+    setWallKey((k) => k + 1)
     setImportedName(null)
     setImportError(null)
   }
@@ -80,7 +83,7 @@ export default function HomePage() {
         </div>
       )}
 
-      <Wall config={config} />
+      <Wall key={wallKey} config={config} />
     </div>
   )
 }

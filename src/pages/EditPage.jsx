@@ -9,52 +9,66 @@ function emptyBucket(x) {
   return { name: '', items: Array(x).fill('') }
 }
 
-function validate(x, buckets) {
+function validate(buckets) {
   const errors = []
-
-  if (buckets.length !== x) {
-    errors.push(`You have ${buckets.length} bucket(s) but need exactly ${x}.`)
-  }
-
   buckets.forEach((b, i) => {
     if (!b.name.trim()) errors.push(`Bucket ${i + 1}: category name is empty.`)
     b.items.forEach((item, j) => {
       if (!item.trim()) errors.push(`Bucket ${i + 1}, item ${j + 1}: empty.`)
     })
   })
-
   return errors
 }
 
 export default function EditPage() {
   const [x, setX] = useState(DEFAULT_X)
-  const [buckets, setBuckets] = useState([])
+  const [buckets, setBuckets] = useState(() =>
+    Array(DEFAULT_X).fill(null).map(() => emptyBucket(DEFAULT_X))
+  )
   const [saveErrors, setSaveErrors] = useState([])
 
-  // ── X change ──────────────────────────────────────────────────
+  // ── X change: resize both the bucket count and items per bucket ──
   const handleXChange = (newX) => {
     const n = Math.max(2, Math.min(10, Number(newX)))
     setX(n)
-    // Resize existing buckets' item arrays
-    setBuckets((prev) =>
-      prev.map((b) => ({
+    setBuckets((prev) => {
+      // Resize item arrays in existing buckets
+      const resized = prev.map((b) => ({
         ...b,
         items: Array(n)
           .fill('')
           .map((_, i) => b.items[i] ?? ''),
       }))
-    )
+      // Add or remove buckets to reach exactly n
+      if (resized.length < n) {
+        return [...resized, ...Array(n - resized.length).fill(null).map(() => emptyBucket(n))]
+      }
+      return resized.slice(0, n)
+    })
     setSaveErrors([])
   }
 
   // ── Bucket ops ────────────────────────────────────────────────
   const addBucket = () => {
-    setBuckets((prev) => [...prev, emptyBucket(x)])
+    const n = Math.min(10, x + 1)
+    setX(n)
+    setBuckets((prev) => [
+      // Existing buckets each get one more item slot
+      ...prev.map((b) => ({ ...b, items: [...b.items, ''] })),
+      // New empty bucket
+      emptyBucket(n),
+    ])
     setSaveErrors([])
   }
 
   const removeBucket = (idx) => {
-    setBuckets((prev) => prev.filter((_, i) => i !== idx))
+    const n = Math.max(2, x - 1)
+    setX(n)
+    setBuckets((prev) =>
+      prev
+        .filter((_, i) => i !== idx)
+        .map((b) => ({ ...b, items: b.items.slice(0, n) }))
+    )
     setSaveErrors([])
   }
 
@@ -76,7 +90,7 @@ export default function EditPage() {
 
   // ── Save / Download ───────────────────────────────────────────
   const handleSave = () => {
-    const errors = validate(x, buckets)
+    const errors = validate(buckets)
     if (errors.length > 0) {
       setSaveErrors(errors)
       return
