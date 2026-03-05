@@ -1,11 +1,12 @@
-import Wall from './components/Wall'
-import { testConfig } from './config'
+import { Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import EditPage from './pages/EditPage'
 
 export default function App() {
   return (
-    <div className="app">
-      <h1 className="app-title">Connection Wall</h1>
-      <Wall config={testConfig} />
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/edit" element={<EditPage />} />
+    </Routes>
   )
 }

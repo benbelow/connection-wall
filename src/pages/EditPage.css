@@ -1,0 +1,187 @@
+.edit-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.edit-title {
+  font-size: 2rem;
+  color: var(--text);
+  text-align: center;
+}
+
+/* ── Settings row ──────────────────────────────────────── */
+.edit-settings {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1rem 1.4rem;
+}
+
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.setting-input {
+  width: 72px;
+  background: var(--surface-2);
+  border: 1px solid #2a4a6a;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1.1rem;
+  padding: 0.3rem 0.6rem;
+  text-align: center;
+}
+
+.setting-input:focus {
+  outline: 2px solid #4a90d9;
+}
+
+/* ── Bucket cards ──────────────────────────────────────── */
+.bucket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bucket-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  border: 1px solid #2a3a5a;
+}
+
+.bucket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bucket-number {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.remove-btn:hover {
+  background: rgba(231, 76, 60, 0.15);
+}
+
+/* ── Fields ────────────────────────────────────────────── */
+.field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.field-input,
+.item-input {
+  background: var(--surface-2);
+  border: 1px solid #2a4a6a;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.95rem;
+  padding: 0.45rem 0.7rem;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.field-input:focus,
+.item-input:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.field-input::placeholder,
+.item-input::placeholder {
+  color: #4a5a7a;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--item-cols, 4), 1fr);
+  gap: 0.5rem;
+}
+
+/* ── Action bar ────────────────────────────────────────── */
+.edit-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.add-btn {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid #2a4a6a;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.add-btn:hover {
+  background: #1a4a7a;
+  border-color: #4a90d9;
+}
+
+.save-btn {
+  background: #4a90d9;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.save-btn:hover {
+  background: #357abd;
+}
+
+/* ── Validation errors ─────────────────────────────────── */
+.error-panel {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid #e74c3c;
+  border-radius: var(--radius);
+  padding: 1rem 1.4rem;
+  color: #e74c3c;
+  font-size: 0.9rem;
+}
+
+.error-panel ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.error-panel li {
+  margin-top: 0.25rem;
+}
