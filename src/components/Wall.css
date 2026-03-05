@@ -59,13 +59,16 @@
 /* ── Grid ──────────────────────────────────────────────── */
 .wall-grid {
   display: grid;
-  grid-template-columns: repeat(var(--cols, 5), 1fr);
+  /* Fixed column width so tiles don't shrink on large grids; scroll instead */
+  grid-template-columns: repeat(var(--cols, 5), var(--tile-size, 100px));
   gap: 8px;
+  overflow: auto;
 }
 
 /* ── Tiles ─────────────────────────────────────────────── */
 .tile {
-  aspect-ratio: 1;
+  width: var(--tile-size, 100px);
+  height: var(--tile-size, 100px);
   background: var(--surface-2);
   border-radius: var(--radius);
   border: 2px solid transparent;
@@ -108,7 +111,7 @@
 }
 
 .tile-primary {
-  font-size: clamp(0.7rem, 1.8vw, 1rem);
+  font-size: 0.75rem;
   font-weight: 600;
   word-break: break-word;
   hyphens: auto;
@@ -116,7 +119,7 @@
 }
 
 .tile--complete .tile-primary {
-  font-size: clamp(0.75rem, 2vw, 1.05rem);
+  font-size: 0.8rem;
   font-weight: 700;
   color: #fff;
 }
