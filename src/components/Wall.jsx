@@ -167,7 +167,10 @@ export default function Wall({ config }) {
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                style={content.isComplete ? { '--group-colour': colour } : {}}
+                style={content.isComplete
+                  ? { '--group-colour': colour }
+                  : { '--group-progress': (tile.items.length / x).toFixed(2) }
+                }
                 onClick={() => handleClick(tile.id)}
                 role="button"
                 tabIndex={content.isComplete ? -1 : 0}
