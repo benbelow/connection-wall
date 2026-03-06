@@ -119,8 +119,7 @@
   letter-spacing: 0.06em;
 }
 
-.field-input,
-.item-input {
+.field-input {
   background: var(--surface-2);
   border: 1px solid #2a4a6a;
   border-radius: 6px;
@@ -131,21 +130,56 @@
   width: 100%;
 }
 
-.field-input:focus,
-.item-input:focus {
+.field-input:focus {
   outline: none;
   border-color: #4a90d9;
 }
 
-.field-input::placeholder,
-.item-input::placeholder {
+.field-input::placeholder {
   color: #4a5a7a;
 }
 
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--item-cols, 4), 1fr);
-  gap: 0.4rem;
+.items-textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.items-textarea {
+  background: var(--surface-2);
+  border: 1px solid #2a4a6a;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-family: var(--font);
+  padding: 0.4rem 0.55rem;
+  resize: vertical;
+  transition: border-color 0.15s;
+  width: 100%;
+  line-height: 1.6;
+}
+
+.items-textarea:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.items-textarea::placeholder {
+  color: #4a5a7a;
+}
+
+.items-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.items-count--ok {
+  color: #6aaa64;
+}
+
+.items-count--over {
+  color: #e74c3c;
 }
 
 /* ── Action bar ────────────────────────────────────────── */

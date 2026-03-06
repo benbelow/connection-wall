@@ -1,12 +1,15 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Wall from '../components/Wall'
-import { testConfig } from '../config'
 import { decodeGameFile } from '../utils/gameFile'
+import defaultTxt from '../../default.txt?raw'
 import './HomePage.css'
 
+const defaultResult = decodeGameFile(defaultTxt)
+const defaultConfig = defaultResult.ok ? defaultResult.config : null
+
 export default function HomePage() {
-  const [config, setConfig] = useState(testConfig)
+  const [config, setConfig] = useState(defaultConfig)
   const [wallKey, setWallKey] = useState(0)
   const [importError, setImportError] = useState(null)
   const [importedName, setImportedName] = useState(null)
@@ -42,7 +45,7 @@ export default function HomePage() {
   }
 
   const handleResetToDefault = () => {
-    setConfig(testConfig)
+    setConfig(defaultConfig)
     setWallKey((k) => k + 1)
     setImportedName(null)
     setImportError(null)

@@ -9,13 +9,17 @@ function emptyBucket(x) {
   return { name: '', items: Array(x).fill('') }
 }
 
-function validate(buckets) {
+function validate(buckets, x) {
   const errors = []
   buckets.forEach((b, i) => {
     if (!b.name.trim()) errors.push(`Bucket ${i + 1}: category name is empty.`)
-    b.items.forEach((item, j) => {
+    const items = b.items.slice(0, x)
+    items.forEach((item, j) => {
       if (!item.trim()) errors.push(`Bucket ${i + 1}, item ${j + 1}: empty.`)
     })
+    const totalNonEmpty = b.items.filter(s => s.trim()).length
+    if (items.length < x) errors.push(`Bucket ${i + 1}: needs ${x} items, has ${items.length}.`)
+    if (totalNonEmpty > x) errors.push(`Bucket ${i + 1}: has ${totalNonEmpty} items, expected ${x}.`)
   })
   return errors
 }
@@ -78,19 +82,15 @@ export default function EditPage() {
     )
   }, [])
 
-  const updateItem = useCallback((bucketIdx, itemIdx, value) => {
+  const updateItemsFromText = useCallback((bucketIdx, text) => {
     setBuckets((prev) =>
-      prev.map((b, i) =>
-        i === bucketIdx
-          ? { ...b, items: b.items.map((it, j) => (j === itemIdx ? value : it)) }
-          : b
-      )
+      prev.map((b, i) => (i === bucketIdx ? { ...b, items: text.split('\n') } : b))
     )
   }, [])
 
   // ── Save / Download ───────────────────────────────────────────
   const handleSave = () => {
-    const errors = validate(buckets)
+    const errors = validate(buckets, x)
     if (errors.length > 0) {
       setSaveErrors(errors)
       return
@@ -100,7 +100,7 @@ export default function EditPage() {
       groups: buckets.map((b, i) => ({
         id: `group-${i}`,
         name: b.name.trim(),
-        items: b.items.map((it) => it.trim()),
+        items: b.items.slice(0, x).map((it) => it.trim()),
       })),
     }
 
@@ -163,17 +163,20 @@ export default function EditPage() {
               />
             </label>
 
-            <div className="items-grid" style={{ '--item-cols': Math.min(x, 4) }}>
-              {bucket.items.map((item, ii) => (
-                <input
-                  key={ii}
-                  type="text"
-                  className="item-input"
-                  placeholder={`Item ${ii + 1}`}
-                  value={item}
-                  onChange={(e) => updateItem(bi, ii, e.target.value)}
-                />
-              ))}
+            <div className="items-textarea-wrapper">
+              <textarea
+                className="items-textarea"
+                rows={x}
+                placeholder={Array.from({ length: x }, (_, i) => `Item ${i + 1}`).join('\n')}
+                value={bucket.items.join('\n')}
+                onChange={(e) => updateItemsFromText(bi, e.target.value)}
+                onFocus={(e) => { const el = e.target; setTimeout(() => el.setSelectionRange(0, 0), 0) }}
+              />
+              <span className={`items-count${
+                (() => { const n = bucket.items.filter(s => s.trim()).length; return n === x ? ' items-count--ok' : n > x ? ' items-count--over' : '' })()
+              }`}>
+                {bucket.items.filter(s => s.trim()).length} / {x} items
+              </span>
             </div>
           </div>
         ))}
