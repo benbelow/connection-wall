@@ -111,7 +111,9 @@
   align-items: center;
   justify-content: center;
   padding: 0.35rem 0.65rem;
-  white-space: nowrap;
+  max-width: 160px;
+  word-break: break-word;
+  text-align: center;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
   user-select: none;
 }

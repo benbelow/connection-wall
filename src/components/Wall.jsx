@@ -111,8 +111,9 @@ export default function Wall({ config }) {
     if (tile.items.length === 1) {
       return { primary: tile.items[0], count: null, isComplete: false }
     }
+    const preview = tile.items.slice(0, 2).join(', ') + (tile.items.length > 2 ? '…' : '')
     return {
-      primary: tile.items.join(', '),
+      primary: preview,
       count: tile.items.length,
       isComplete: false,
     }
